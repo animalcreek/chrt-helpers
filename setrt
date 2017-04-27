@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# Copyright (c) 2017 Animal Creek Technologies, Inc.
+#
+# Released under the MIT license
+# SPDX-License-Identifier: MIT
+#
+# Set a set of process' realtime scheduling policy and priority using its name
+#
+
+print_usage() {
+        echo "Usage: $( basename $1 ) <process name> <SCHED_FIFO | SCHED_RR> <priority (1-99)>"
+}
+
+if [ $# != 3 ]; then
+        print_usage $0
+        exit 1
+fi
+
+process_name=$1
+sched_policy=$2
+let priority=$3
+
+if [ "$sched_policy" == "SCHED_FIFO" ]; then
+	sched_flag="-f"
+elif [ "$sched_policy" == "SCHED_RR" ]; then
+	sched_flag="-r"
+else
+        print_usage $0
+	exit 2
+fi
+
+if [ $priority -lt 1 ] || [ $priority -gt 99 ]
+then
+        print_usage $0
+	exit 3
+fi
+
+PIDS=$( ps -e | grep $process_name | tr -s ' ' | cut -d ' ' -f 2 )
+
+for i in $PIDS; do
+	echo ---> $i
+	chrt $sched_flag -p $priority $i
+done

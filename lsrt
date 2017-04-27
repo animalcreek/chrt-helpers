@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# Copyright (c) 2017 Animal Creek Technologies, Inc.
+#
+# Released under the MIT license
+# SPDX-License-Identifier: MIT
+#
+# List process' realtime scheduling policy and priority using its name
+#
+
+print_usage() {
+	echo "Usage: $( basename $1 ) <process name>"
+}
+
+if [ $# != 1 ]; then
+	print_usage $0
+	exit 1
+fi
+
+#PIDS=`ps -e | grep $1 | tr -s ' ' | cut -d ' ' -f 2 | sed 's/PID//'`
+PIDS=$( ps -e | grep $1 | tr -s ' ' | cut -d ' ' -f 2 )
+
+for i in $PIDS; do
+	echo "$1 PID: $i"
+	chrt -p $i
+done
