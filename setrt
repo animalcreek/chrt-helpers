@@ -39,6 +39,6 @@ fi
 PIDS=$( ps -e | grep $process_name | tr -s ' ' | cut -d ' ' -f 2 )
 
 for i in $PIDS; do
-	echo ---> $i
+	echo "$1 PID: $i"
 	chrt $sched_flag -p $priority $i
 done
