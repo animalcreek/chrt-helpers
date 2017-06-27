@@ -17,7 +17,7 @@ if [ $# != 1 ]; then
 	exit 1
 fi
 
-PIDS=$( ps -e | grep $1 | tr -s ' ' | cut -d ' ' -f 2 )
+PIDS=$( ps -e | grep $1 | grep -o '^[[:space:]]*[[:digit:]]\+\>' )
 
 for i in $PIDS; do
 	echo "$1 PID: $i"
