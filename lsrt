@@ -17,7 +17,6 @@ if [ $# != 1 ]; then
 	exit 1
 fi
 
-#PIDS=`ps -e | grep $1 | tr -s ' ' | cut -d ' ' -f 2 | sed 's/PID//'`
 PIDS=$( ps -e | grep $1 | tr -s ' ' | cut -d ' ' -f 2 )
 
 for i in $PIDS; do
